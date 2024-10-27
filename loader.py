@@ -3,7 +3,7 @@ import sqlite3
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-TOKEN = '7385714840:AAHlyQdM85RjBl7pklB0mAGlU7d6AYy1950'
+TOKEN = '7897854042:AAFY-hKwxyuDu8iMGRvdWN5Ry7xsl6G-T-k'
 con = sqlite3.connect("data.db")
 cursor = con.cursor()
 router = Router()
