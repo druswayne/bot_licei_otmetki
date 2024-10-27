@@ -23,6 +23,10 @@ kb_klass_mess = [
     types.InlineKeyboardButton(text="11Л", callback_data="mess-L_11"),
     types.InlineKeyboardButton(text="11Ю", callback_data="mess-UR_11")]
 
+kb_send_photo = [
+    types.KeyboardButton(text='Да'),
+    types.KeyboardButton(text='Нет')]
+
 kb_soglas = [
     types.KeyboardButton(text='Да, это я'),
     types.KeyboardButton(text='Нет, это не я')]
