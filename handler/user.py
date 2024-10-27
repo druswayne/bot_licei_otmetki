@@ -33,6 +33,14 @@ async def reg(message: Message, bot: Bot, state: FSMContext) -> None:
     # https://t.me/collab_bot?start=кеекекеек
     token = message.text.split()[-1].split('_')[-1]
     user_id = message.chat.id
+    token_db = req("SELECT token FROM users WHERE id=(?)", [user_id])
+    try:
+        if token != '/start' and token != token_db[0][0]:
+            await message.answer(text='Аккаунт уже привязан к журналу.\nЧтобы отвязать аккаунт используйте команду /delete')
+            return
+
+    except:
+        pass
 
     data = req("SELECT * FROM users WHERE id=(?)", [user_id])
     if len(data) != 0:
