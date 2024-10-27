@@ -200,7 +200,7 @@ async def get_other_data(callback: types.CallbackQuery, bot: Bot, state: FSMCont
 async def page_other_date(message: Message, bot, state: FSMContext):
     await state.update_data(date=message.text)
     data_date = await state.get_data()
-    date = f'date_{data_date['date']}'
+    date = f'date_{data_date["date"]}'
     await state.clear()
     klass = state_data['class']
     builder = ReplyKeyboardBuilder()
