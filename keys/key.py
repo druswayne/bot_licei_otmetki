@@ -14,6 +14,15 @@ kb_klass = [
     types.InlineKeyboardButton(text="11Л", callback_data="class-L_11"),
     types.InlineKeyboardButton(text="11Ю", callback_data="class-UR_11")]
 
+
+kb_klass_mess = [
+    types.InlineKeyboardButton(text="10М1", callback_data="mess-M1_10"),
+    types.InlineKeyboardButton(text="10М2", callback_data="mess-M2_10"),
+    types.InlineKeyboardButton(text="10Г", callback_data="mess-G_10"),
+    types.InlineKeyboardButton(text="11М2", callback_data="mess-M2_11"),
+    types.InlineKeyboardButton(text="11Л", callback_data="mess-L_11"),
+    types.InlineKeyboardButton(text="11Ю", callback_data="mess-UR_11")]
+
 kb_soglas = [
     types.KeyboardButton(text='Да, это я'),
     types.KeyboardButton(text='Нет, это не я')]
