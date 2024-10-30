@@ -112,12 +112,15 @@ async def get_stats(message: Message):
     name = req('SELECT name from users WHERE id=(?)', [id_user])[0][0]
     url = f'https://druswayne.pythonanywhere.com/get_stats/?klass={klass}&name={name}'
     data = json.loads(requests.get(url).content)
-
+    try:
+        average = round(sum(data) / len(data), 2)
+    except:
+        average = 0
     text = ''
     for i in data:
         text += f'{i}, '
     text = text[:-2]
-    await message.answer(f'Твои отметки по математике: {text}')
+    await message.answer(f'{name}, твои отметки по математике: {text}\nСредний балл: {average}')
 
 @router.message(Command('delete'))
 async def del_user(message: Message):
