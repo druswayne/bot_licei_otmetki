@@ -33,15 +33,23 @@ async def reg(message: Message, bot: Bot, state: FSMContext) -> None:
     # https://t.me/collab_bot?start=кеекекеек
     token = message.text.split()[-1].split('_')[-1]
     user_id = message.chat.id
-    token_db = req("SELECT token FROM users WHERE id=(?)", [user_id])
+
     try:
+        token_db = req("SELECT token FROM users WHERE id=(?)", [user_id])
         if token != '/start' and token != token_db[0][0]:
             await message.answer(text='Аккаунт уже привязан к журналу.\nЧтобы отвязать аккаунт используйте команду /delete')
             return
 
     except:
         pass
-
+    try:
+        id_token = req("SELECT id FROM users WHERE token=(?)", [token])[0][0]
+        if str(id_token).isdigit():
+            await message.answer(
+                text='Упс\nТакой пользователь уже зарегистрировался')
+            return
+    except:
+        pass
     data = req("SELECT * FROM users WHERE id=(?)", [user_id])
     if len(data) != 0:
         builder = ReplyKeyboardBuilder()
@@ -66,12 +74,6 @@ async def reg(message: Message, bot: Bot, state: FSMContext) -> None:
                              reply_markup=builder.as_markup(resize_keyboard=True))
 
 
-"""будет таблица в бд, в которой будет имя токен id
-    при первом старте вопрос "ты вася пупкин?
-    Если да, в бд вписывается id в таблицу с токеном и именем.
-    т.е. аккаунт закреплен за пользователем
-    дальше кнопка "узнать свои отметки"
-    """
 
 
 @router.message(Form_name.choice)
