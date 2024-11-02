@@ -39,7 +39,8 @@ class Form_mess(StatesGroup):
 @router.message(Command('cancel'))
 async def cancel(message: Message, bot: Bot, state: FSMContext):
     await state.clear()
-    await bot.send_message(chat_id=731866035, text='Действие отменено')
+
+    await bot.send_message(chat_id=731866035, text='Действие отменено',  reply_markup = types.ReplyKeyboardRemove())
 
 
 @router.message(Command('mess'))
@@ -95,7 +96,11 @@ async def flag_photo(message: Message, bot: Bot, state: FSMContext):
     if message.text == "Нет":
         data = await state.get_data()
         text_mess = data['text']
-        data_users = req("SELECT id FROM users WHERE klass=(?)", [state_data['class']])
+        if state_data['class'] == '666':
+            data_users = req("SELECT id FROM users",[])
+        else:
+            data_users = req("SELECT id FROM users WHERE klass=(?)", [state_data['class']])
+
         for user in data_users:
             try:
                 await bot.send_message(chat_id=user[0], text=f'Письмо от наставника:\n{text_mess}')
@@ -114,7 +119,12 @@ async def send_mess_photo(message: Message, bot: Bot, state: FSMContext):
     data = await state.get_data()
     text_mess = data['text']
     await state.clear()
-    data_users = req("SELECT id FROM users WHERE klass=(?)", [state_data['class']])
+    if state_data['class'] == '666':
+        data_users = req("SELECT id FROM users",[])
+
+    else:
+        data_users = req("SELECT id FROM users WHERE klass=(?)", [state_data['class']])
+
     for user in data_users:
         try:
             await bot.send_photo(chat_id=user[0], photo=photo, caption=f'Письмо от наставника:\n{text_mess}')
@@ -154,11 +164,10 @@ async def choice_date(callback: types.CallbackQuery, bot: Bot):
     del state_data['mess1']
     klass = callback.data.split('-')[1]
     state_data['class'] = klass
-    # date = f"date_{datetime.datetime.now().day}_{month[datetime.datetime.now().month]}"
-    date = 'date_04_ноя'
+    date = f"date_{datetime.datetime.now().day}_{month[datetime.datetime.now().month]}"
+    #date = 'date_04_ноя'
     url = f'https://druswayne.pythonanywhere.com/getdate/?date={date}&klass={klass}'
     data = requests.get(url)
-
     builder = InlineKeyboardBuilder()
     for date in loads(data.content):
         button = types.InlineKeyboardButton(text=f"{date[5:]}", callback_data=date)
