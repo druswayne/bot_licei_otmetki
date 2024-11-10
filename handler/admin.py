@@ -66,6 +66,8 @@ async def send_mess(message: Message, bot: Bot) -> None:
         await message.answer('Нет доступа.')
 
 
+
+
 @router.callback_query(F.data.startswith("mess"))
 async def get_text(callback: types.CallbackQuery, bot: Bot, state: FSMContext):
     # await bot.delete_message(chat_id=731866035, message_id=state_data['mess'])
@@ -100,14 +102,16 @@ async def flag_photo(message: Message, bot: Bot, state: FSMContext):
             data_users = req("SELECT id FROM users",[])
         else:
             data_users = req("SELECT id FROM users WHERE klass=(?)", [state_data['class']])
-
+        count_mess = 0
         for user in data_users:
             try:
+                count_mess += 1
                 await bot.send_message(chat_id=user[0], text=f'Письмо от наставника:\n{text_mess}')
             except:
                 pass
-        await bot.send_message(chat_id=731866035, text='Письма отправлены!', reply_markup=types.ReplyKeyboardRemove())
+        await bot.send_message(chat_id=731866035, text=f'Письма отправлены!\n{count_mess}', reply_markup=types.ReplyKeyboardRemove())
         await state.clear()
+
         return
     await state.set_state(Form_mess.photo)
     await message.answer(text='Отправляй фотку', reply_markup=types.ReplyKeyboardRemove())
@@ -119,18 +123,20 @@ async def send_mess_photo(message: Message, bot: Bot, state: FSMContext):
     data = await state.get_data()
     text_mess = data['text']
     await state.clear()
+
     if state_data['class'] == '666':
         data_users = req("SELECT id FROM users",[])
 
     else:
         data_users = req("SELECT id FROM users WHERE klass=(?)", [state_data['class']])
-
+    count_mess = 0
     for user in data_users:
         try:
+            count_mess += 1
             await bot.send_photo(chat_id=user[0], photo=photo, caption=f'Письмо от наставника:\n{text_mess}')
         except:
             pass
-    await bot.send_message(chat_id=731866035, text='Письма отправлены!', reply_markup=types.ReplyKeyboardRemove())
+    await bot.send_message(chat_id=731866035, text=f'Письма отправлены!\n{count_mess}', reply_markup=types.ReplyKeyboardRemove())
 
 
 @router.message(Command('grade'))
@@ -164,7 +170,8 @@ async def choice_date(callback: types.CallbackQuery, bot: Bot):
     del state_data['mess1']
     klass = callback.data.split('-')[1]
     state_data['class'] = klass
-    date = f"date_{datetime.datetime.now().day}_{month[datetime.datetime.now().month]}"
+    date = f"date_{datetime.datetime.now().day:02}_{month[datetime.datetime.now().month]:02}"
+    print(date)
     #date = 'date_04_ноя'
     url = f'https://druswayne.pythonanywhere.com/getdate/?date={date}&klass={klass}'
     data = requests.get(url)
