@@ -24,6 +24,11 @@ kb_klass_mess = [
     types.InlineKeyboardButton(text="11Ю", callback_data="mess-UR_11"),
     types.InlineKeyboardButton(text="всем", callback_data="mess-666")]
 
+kb_choice_mess = [
+    types.KeyboardButton(text='Текст'),
+    types.KeyboardButton(text='Квест')
+]
+
 kb_send_photo = [
     types.KeyboardButton(text='Да'),
     types.KeyboardButton(text='Нет')]
