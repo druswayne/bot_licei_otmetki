@@ -48,6 +48,20 @@ async def cancel(message: Message, bot: Bot, state: FSMContext):
 
     await bot.send_message(chat_id=731866035, text='Действие отменено', reply_markup=types.ReplyKeyboardRemove())
 
+@router.message(Command('set_coin'))
+async def set_coin(message: Message, bot: Bot) -> None:
+    user_id = message.chat.id
+    if user_id == 731866035:
+        builder = ReplyKeyboardBuilder()
+        builder.add(types.KeyboardButton(text='открыть', web_app=WebAppInfo(
+            url=f"https://druswayne.pythonanywhere.com/coin/")))
+        await bot.send_message(chat_id=731866035,
+                               text='Монетки',
+                               reply_markup=builder.as_markup(resize_keyboard=True),
+                               )
+    else:
+        await message.answer('Нет доступа.')
+
 
 @router.message(Command('qwest'))
 async def set_qwest(message: Message, bot: Bot) -> None:
@@ -60,7 +74,8 @@ async def set_qwest(message: Message, bot: Bot) -> None:
                                text='Редактор квеста',
                                reply_markup=builder.as_markup(resize_keyboard=True),
                                )
-
+    else:
+        await message.answer('Нет доступа.')
 
 @router.message(Command('mess'))
 async def send_mess(message: Message, bot: Bot) -> None:

@@ -27,6 +27,18 @@ def req(zapros, data):
     return data_decode
 
 
+@router.message(Command('coin'))
+async def get_coin(message: Message, bot: Bot):
+    user_id = message.chat.id
+    data = req("SELECT * FROM users WHERE id=(?)", [user_id])
+    if len(data) == 0:
+        await message.answer('Отсканируй QR-код для регистрации')
+        return
+    coin = req('select coin from users where id=(?)', [user_id])[0][0]
+    await message.answer(f'На счету {coin} баллов.')
+
+
+
 @router.message(Command('start'))
 async def reg(message: Message, bot: Bot, state: FSMContext) -> None:
     # уникальный токен
